@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Collection = require('../models/galaxy');
+const Collection = require('../models/star');
 
 router.get('/', (req, res, next) =>
   Collection.find({})

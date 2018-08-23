@@ -1,39 +1,34 @@
-let express = require('express')
-let bp = require('body-parser')
-require('./dbconfig/db-config')
-let port = 3000
-let server = express()
-server.use(bp.json())
-server.use(bp.urlencoded({
-  extended: true
-}))
+const server = require('express')();
 
+const bp = require('body-parser');
+server.use(bp.json());
+server.use(
+  bp.urlencoded({
+    extended: true
+  })
+);
 
-let galaxyRoutes = require('./routes/galaxies')
+require('./db/db-config');
 
+const routes = {
+  galaxies: require('./routes/galaxies'),
+  stars: require('./routes/stars'),
+  planets: require('./routes/planets'),
+  moons: require('./routes/moons')
+};
 
-
-
-server.use('/api/galaxies', galaxyRoutes)
-
+Object.keys(routes).forEach(routeName =>
+  server.use(`/api/${routeName}`, routes[routeName])
+);
 
 server.use('/api/*', (error, req, res, next) => {
-  res.send(error)
-})
-
+  res.status(400).send(error);
+});
 server.use('*', (req, res, next) => {
-  res.status(404).send('<h1>NO PAGE FOUND</h1>')
-})
+  res.status(404).send('<h1>NO PAGE FOUND</h1>');
+});
 
-
-
-
-
-
-
-
-
-
+const port = 3000;
 server.listen(port, () => {
-  console.log('SPACE....', port)
-})
+  console.log(`Started Da Planets server on port: ${port}`);
+});

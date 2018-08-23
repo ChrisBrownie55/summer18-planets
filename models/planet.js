@@ -7,9 +7,9 @@ const schema = new Schema({
     required: true
   },
   description: String,
-  color: {
-    type: String,
-    enum: ['red', 'yellow', 'blue', 'orange', 'white', 'black'],
+  starId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Star',
     required: true
   },
   galaxyId: {
@@ -19,4 +19,4 @@ const schema = new Schema({
   }
 });
 
-module.exports = mongoose.model('Star', schema);
+module.exports = mongoose.model('Planet', schema);
